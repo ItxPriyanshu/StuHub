@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:stuhub/providers/appRefreshProvider.dart';
 import 'package:stuhub/providers/circularloadingProvider.dart';
 import 'package:stuhub/providers/userProfileProvider.dart';
@@ -300,10 +301,18 @@ class Settingscreen extends ConsumerWidget {
         ),
         if(isLoading)
         Container(color: Colors.black54,
-        child: const Center(
-          child: CircularProgressIndicator(
-            color: Colors.lightGreenAccent,
-          ),
+        child:  Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+               const Text("Connecting to server...",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20),),
+               const SizedBox(height: 20,),
+               SizedBox(
+                height: 40,
+                width: 40,
+                child: Lottie.asset("assets/lotties/connectivity.json")),
+            ],
+          )
         ),)
         ],
       ),

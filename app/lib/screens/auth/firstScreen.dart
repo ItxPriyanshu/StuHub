@@ -16,10 +16,10 @@ class Firstscreen extends StatefulWidget {
 class _FirstscreenState extends State<Firstscreen>
     with TickerProviderStateMixin {
   late AnimationController floatingController;
-  late AnimationController ScaleController;
+  late AnimationController scaleController;
 
   late Animation<double> floatinAnimation;
-  late Animation<double> ScaleAnimation;
+  late Animation<double> scaleAnimation;
 
   late double scale;
 
@@ -36,13 +36,13 @@ class _FirstscreenState extends State<Firstscreen>
     );
     floatingController.repeat(reverse: true);
 
-    ScaleController = AnimationController(
+    scaleController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 400),
     );
 
-    ScaleController.addListener(() {
-      if (ScaleController.isCompleted) {
+    scaleController.addListener(() {
+      if (scaleController.isCompleted) {
         Navigator.push(
           context,
           PageRouteBuilder(
@@ -55,7 +55,7 @@ class _FirstscreenState extends State<Firstscreen>
           ),
         );
             Timer(Duration(milliseconds: 500), () {
-      ScaleController.reset();
+      scaleController.reset();
     });
       }
     });
@@ -64,7 +64,7 @@ class _FirstscreenState extends State<Firstscreen>
   @override
   void dispose() {
     floatingController.dispose();
-    ScaleController.dispose();
+    scaleController.dispose();
     super.dispose();
   }
 
@@ -75,10 +75,10 @@ class _FirstscreenState extends State<Firstscreen>
     final radius = sqrt(size.width * size.width + size.height * size.height);
 
     scale = radius / 25;
-    ScaleAnimation = Tween<double>(
+    scaleAnimation = Tween<double>(
       begin: 1,
       end: scale,
-    ).animate(ScaleController);
+    ).animate(scaleController);
     super.didChangeDependencies();
   }
 
@@ -111,9 +111,10 @@ class _FirstscreenState extends State<Firstscreen>
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(color: Colors.white24),
                         ),
-                        child: const Icon(
-                          Icons.calendar_today,
-                          color: Colors.white,
+                        child:  Image.asset("assets/images/logo.png",
+                        height: 90,
+                        width: 90,
+                        fit: BoxFit.contain,
                         ),
                       ),
                     ),
@@ -152,7 +153,7 @@ class _FirstscreenState extends State<Firstscreen>
                 children: [
                   //animation container
                   ScaleTransition(
-                    scale: ScaleAnimation,
+                    scale: scaleAnimation,
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -170,7 +171,7 @@ class _FirstscreenState extends State<Firstscreen>
                   GestureDetector(
                     onTap: () {
                       print("get Started clicked");
-                      ScaleController.forward();
+                      scaleController.forward();
                     },
                     child: Container(
                       height: 50,

@@ -4,11 +4,12 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:stuhub/models/sessionModel.dart';
+import 'package:stuhub/providers/circularloadingProvider.dart';
 import 'package:stuhub/repositories/sessionRepository.dart';
 import 'package:stuhub/repositories/setupRepository.dart';
 import 'package:stuhub/screens/setup/setup_gate_screen.dart';
-import 'package:stuhub/screens/setup/subjectsSetupScreen.dart';
 import 'package:stuhub/widgets/setup/setupRestoreButton.dart';
 import 'package:uuid/uuid.dart';
 
@@ -172,235 +173,256 @@ class _SessionSetupScreenState extends ConsumerState<SessionSetupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(circularloadingProvider);
+
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(color: Colors.black),
-
-        child: SafeArea(
-          bottom: false,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 40,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            //top arrow
-                            Row(
+      body: Stack(
+        children: [
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(color: Colors.black),
+          
+            child: SafeArea(
+              bottom: false,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 40,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  height: 40,
-                                  width: 40,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: Colors.white24,
-                                      width: 2,
+                                //top arrow
+                                Row(
+                                  children: [
+                                    Container(
+                                      height: 40,
+                                      width: 40,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: Colors.white24,
+                                          width: 2,
+                                        ),
+                                      ),
+                                      child: Icon(
+                                        Icons.arrow_downward,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
-                                  child: Icon(
-                                    Icons.arrow_downward,
+                                    const Spacer(),
+                                   (widget.showRestoreOption) ? RestoreBackupButton() :const SizedBox(),
+                                  ],
+                                ),
+                                SizedBox(height: 20),
+                                //top headings
+                                Text(
+                                  "Session setup",
+                                  style: GoogleFonts.manrope(
                                     color: Colors.white,
-                                  ),
-                                ),
-                                const Spacer(),
-                               (widget.showRestoreOption) ? RestoreBackupButton() :const SizedBox(),
-                              ],
-                            ),
-                            SizedBox(height: 20),
-                            //top headings
-                            Text(
-                              "Session setup",
-                              style: GoogleFonts.manrope(
-                                color: Colors.white,
-                                fontSize: 30,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              "Create a session and start marking attendance.",
-                              style: GoogleFonts.manrope(
-                                color: Colors.white,
-                                fontSize: 15,
-                                // fontWeight: FontWeight.w200,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    //START DATE
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.2),
-                              width: 1.5,
-                            ),
-                          ),
-
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Start",
-                                  style: GoogleFonts.manrope(
-                                    color: Colors.redAccent,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 20),
-                                Container(
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.circular(14),
-                                  ),
-                                  child: TextField(
-                                    cursorColor: Colors.white,
-                                    onTap: selectStartDate,
-                                    readOnly: true,
-                                    controller: startDateController,
-                                    decoration: InputDecoration(
-                                      label: Text("Select Date",style: TextStyle(color: Colors.grey)),
-                                      suffixIcon: Icon(
-                                        Icons.calendar_month,
-                                        color: Colors.white,
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white,width: 2))
-                                    ),
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w700,
                                   ),
                                 ),
                                 SizedBox(height: 10),
+                                Text(
+                                  "Create a session and start marking attendance.",
+                                  style: GoogleFonts.manrope(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    // fontWeight: FontWeight.w200,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
                         ),
-                      ),
-                    ),
-
-                    SizedBox(height: 30),
-
-                    //END DATE
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.2),
-                              width: 1.5,
-                            ),
-                          ),
-
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "End",
-                                  style: GoogleFonts.manrope(
-                                    color: Colors.redAccent,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+          
+                        //START DATE
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.2),
+                                  width: 1.5,
                                 ),
-                                SizedBox(height: 20),
-                                Container(
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.circular(14),
-                                  ),
-                                  child: TextField(
-                                    cursorColor: Colors.white,
-                                    onTap: selectEndDate,
-                                    readOnly: true,
-                                    controller: endDateController,
-                                    decoration: InputDecoration(
-                                      label: const Text("Select Date",style: TextStyle(color: Colors.grey),),
-                                      suffixIcon: Icon(
-                                        Icons.calendar_month,
-                                        color: Colors.white,
+                              ),
+          
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Start",
+                                      style: GoogleFonts.manrope(
+                                        color: Colors.redAccent,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      border: OutlineInputBorder(
+                                    ),
+                                    SizedBox(height: 20),
+                                    Container(
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black,
                                         borderRadius: BorderRadius.circular(14),
                                       ),
-                                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white,width: 2))
+                                      child: TextField(
+                                        cursorColor: Colors.white,
+                                        onTap: selectStartDate,
+                                        readOnly: true,
+                                        controller: startDateController,
+                                        decoration: InputDecoration(
+                                          label: Text("Select Date",style: TextStyle(color: Colors.grey)),
+                                          suffixIcon: Icon(
+                                            Icons.calendar_month,
+                                            color: Colors.white,
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(14),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white,width: 2))
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    SizedBox(height: 10),
+                                  ],
                                 ),
-                                SizedBox(height: 10),
-                              ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
+          
+                        SizedBox(height: 30),
+          
+                        //END DATE
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.2),
+                                  width: 1.5,
+                                ),
+                              ),
+          
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "End",
+                                      style: GoogleFonts.manrope(
+                                        color: Colors.redAccent,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                    Container(
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
+                                      child: TextField(
+                                        cursorColor: Colors.white,
+                                        onTap: selectEndDate,
+                                        readOnly: true,
+                                        controller: endDateController,
+                                        decoration: InputDecoration(
+                                          label: const Text("Select Date",style: TextStyle(color: Colors.grey),),
+                                          suffixIcon: Icon(
+                                            Icons.calendar_month,
+                                            color: Colors.white,
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(14),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white,width: 2))
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: InkWell(
-                  onTap: saveSession,
-                  child: Container(
-                    height: 50,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.redAccent,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Proceed",
-                        style: GoogleFonts.manrope(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                  ),
+          
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: InkWell(
+                      onTap: saveSession,
+                      child: Container(
+                        height: 50,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.redAccent,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Proceed",
+                            style: GoogleFonts.manrope(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
+                  SizedBox(height: 40),
+                ],
               ),
-              SizedBox(height: 40),
-            ],
+            ),
           ),
-        ),
+           if(isLoading)
+        Container(color: Colors.black54,
+        child:  Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+               const Text("Connecting to server...",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20),),
+               const SizedBox(height: 20,),
+               SizedBox(
+                height: 40,
+                width: 40,
+                child: Lottie.asset("assets/lotties/connectivity.json")),
+            ],
+          )
+        ),)
+        ],
       ),
     );
   }

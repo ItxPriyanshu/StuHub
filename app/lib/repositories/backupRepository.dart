@@ -20,7 +20,7 @@ class Backuprepository {
     final token = await TokenStorage.getToken();
 
     final response = await http.post(
-      Uri.parse("http://10.0.2.2:5000/api/sync/backup"),
+      Uri.parse("https://stuhub-backend-v3h7.onrender.com/api/sync/backup"),
       headers: {
         "Content-Type": "application/json",
 

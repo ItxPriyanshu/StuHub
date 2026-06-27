@@ -17,7 +17,7 @@ class Restorerepository {
     final token = await TokenStorage.getToken();
 
     final response = await http.get(
-      Uri.parse("http://10.0.2.2:5000/api/sync/restore"),
+      Uri.parse("https://stuhub-backend-v3h7.onrender.com/api/sync/restore"),
       headers: {"Authorization": "Bearer $token"},
     );
     print("========== RESTORE RESPONSE ==========");

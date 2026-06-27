@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class Services {
-  static const String baseUrl = "http://10.0.2.2:5000/api";
+  static const String baseUrl = "https://stuhub-backend-v3h7.onrender.com/api";
   // static const String baseUrl = "http://localhost:5000/api";
 
 
