@@ -13,11 +13,6 @@ class TodayClassesSectiton extends ConsumerWidget {
     final todayclasses = ref.watch(todayClassesProvider);
     return todayclasses.when(
           data: (classes) {
-            final totalClassesToday = classes.fold(
-              0,
-              (sum, item) => sum + item.classCount,
-            );
-        
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

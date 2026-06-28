@@ -63,13 +63,19 @@ class TodayClassCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              todayClass.subjectName,
-              style: GoogleFonts.manrope(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  todayClass.subjectName,
+                  style: GoogleFonts.manrope(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text("<-- Swipe left to mark absent",style: TextStyle(fontSize: 12,color: Colors.grey),)
+              ],
             ),
             const SizedBox(height: 8),
             Text(

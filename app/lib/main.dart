@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stuhub/screens/auth/authGate.dart';
-import 'package:stuhub/screens/auth/firstScreen.dart';
-void main() {
+import 'package:stuhub/services/notification_service.dart';
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.instance.initialize();
   runApp(ProviderScope(child: const MyApp()));
 }
 
