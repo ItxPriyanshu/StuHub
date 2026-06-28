@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stuhub/providers/appRefreshProvider.dart';
 import 'package:stuhub/providers/circularloadingProvider.dart';
 import 'package:stuhub/repositories/restoreRepository.dart';
+import 'package:stuhub/repositories/setupRepository.dart';
 import 'package:stuhub/screens/NavigationScreen/mainNavigationScreen.dart';
 
 class RestoreBackupButton extends ConsumerWidget {
@@ -21,6 +22,12 @@ class RestoreBackupButton extends ConsumerWidget {
 
         try {
           await Restorerepository().restoreAll();
+
+          // Mark setup as completed
+    await Setuprepository().markSessionComplete();
+    await Setuprepository().markSubjectsComplete();
+    await Setuprepository().markTimeTableComplete();
+
 
           ApprefreshServiceProvider.refreshAll(ref);
 

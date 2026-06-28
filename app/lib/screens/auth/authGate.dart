@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stuhub/repositories/setupRepository.dart';
 import 'package:stuhub/screens/NavigationScreen/mainNavigationScreen.dart';
 import 'package:stuhub/screens/auth/firstScreen.dart';
-import 'package:stuhub/screens/home/homeScreen.dart';
-import 'package:stuhub/screens/setup/sessionSetupScreen.dart';
 import 'package:stuhub/screens/setup/setup_gate_screen.dart';
 import 'package:stuhub/storage/token_storage.dart';
 
@@ -18,21 +15,34 @@ class _AuthGateState extends State<AuthGate> {
   @override
   void initState() {
     super.initState();
-    _checkLogin();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+  _checkLogin();
+});
   }
 
   Future<void> _checkLogin() async {
+    try {
     final token = await TokenStorage.getToken();
-    if (!mounted) return;
-    if (token == null) {
+      if (!mounted) return;
+
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const Firstscreen()),
+        MaterialPageRoute(
+          builder: (_) =>
+              token == null
+                  ? const Firstscreen()
+                  : const SetupGateScreen(),
+        ),
       );
-    } else {
+    } catch (e,s) {
+      debugPrint("AuthGate Error: $e");
+      debugPrintStack(stackTrace: s);
+      if (!mounted) return;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => SetupGateScreen()),
+        MaterialPageRoute(
+          builder: (_) => const Firstscreen(),
+        ),
       );
     }
   }
