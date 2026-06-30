@@ -125,7 +125,7 @@ class Managesubjectsscreen extends ConsumerWidget {
       context: context,
       builder: (_) {
         return AlertDialog(
-          backgroundColor: const Color(0xff121221),
+          backgroundColor: const Color(0xff121212),
           title: const Text(
             "Add Subject",
             style: TextStyle(color: Colors.white),
