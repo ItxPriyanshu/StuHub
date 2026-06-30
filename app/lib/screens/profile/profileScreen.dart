@@ -171,7 +171,7 @@ class ProfileScreen extends ConsumerWidget {
                                     color: Colors.lightBlueAccent,
                                   ),
                                   title: Text(
-                                    "Username",
+                                    "Email",
                                     style: GoogleFonts.manrope(
                                       fontSize: 10,
                                       fontWeight: FontWeight.normal,

@@ -153,8 +153,132 @@ const sendResetOtp = async (req, res) => {
         //send email
         await sendEmail({
             to: user.email,
-            subject: "StuHub Password Reset OTP",
-            text: `Your OTP is ${otp}. It will expire in 10 minutes.`,
+            subject: "Reset Your StuHub Password",
+            text: `Your OTP is ${otp}. It expires in 10 minutes.`,
+            html: `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body style="margin:0;padding:0;background:#f4f6f9;font-family:Arial,Helvetica,sans-serif;">
+
+<table width="100%" cellpadding="0" cellspacing="0">
+<tr>
+<td align="center">
+
+<table width="600" cellpadding="0" cellspacing="0"
+style="background:#ffffff;border-radius:12px;overflow:hidden;margin-top:40px;">
+
+<tr>
+<td
+style="background:#111827;padding:30px;text-align:center;">
+
+<h1
+style="color:#4CAF50;margin:0;font-size:28px;">
+StuHub
+</h1>
+
+<p
+style="color:#d1d5db;margin-top:8px;">
+Smart Attendance Management
+</p>
+
+</td>
+</tr>
+
+<tr>
+<td style="padding:40px;">
+
+<h2 style="margin-top:0;color:#222;">
+Password Reset Request
+</h2>
+
+<p
+style="font-size:16px;color:#555;line-height:1.7;">
+We received a request to reset your StuHub password.
+</p>
+
+<p
+style="font-size:16px;color:#555;">
+Use the OTP below to continue:
+</p>
+
+<div
+style="
+margin:35px auto;
+width:230px;
+padding:18px;
+background:#f4f4f4;
+border:2px dashed #4CAF50;
+border-radius:12px;
+text-align:center;
+font-size:36px;
+font-weight:bold;
+letter-spacing:8px;
+color:#111827;
+">
+
+${otp}
+
+</div>
+
+<p
+style="
+color:#888;
+font-size:14px;
+line-height:1.6;
+">
+
+This OTP is valid for
+<strong>10 minutes</strong>.
+
+</p>
+
+<p
+style="
+margin-top:30px;
+color:#888;
+font-size:14px;
+">
+
+If you didn't request this password reset,
+you can safely ignore this email.
+
+</p>
+
+</td>
+</tr>
+
+<tr>
+<td
+style="
+background:#f8f8f8;
+padding:20px;
+text-align:center;
+font-size:13px;
+color:#888;
+">
+
+© ${new Date().getFullYear()} StuHub
+
+<br><br>
+
+Made with ❤️ for students.
+
+</td>
+</tr>
+
+</table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>
+`,
         });
         return res.json({
             success: true,
@@ -170,63 +294,63 @@ const sendResetOtp = async (req, res) => {
 }
 
 const verifyResetOtp = async (req, res) => {
-  try {
-    const { email, otp } = req.body;
+    try {
+        const { email, otp } = req.body;
 
-    if (!email || !otp) {
-      return res.status(400).json({
-        success: false,
-        message: "Email and OTP are required",
-      });
+        if (!email || !otp) {
+            return res.status(400).json({
+                success: false,
+                message: "Email and OTP are required",
+            });
+        }
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        if (
+            !user.resetOtp ||
+            !user.resetOtpExpire ||
+            user.resetOtpExpire < Date.now()
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: "OTP has expired",
+            });
+        }
+
+        const hashedOtp = crypto
+            .createHash("sha256")
+            .update(otp)
+            .digest("hex");
+
+        if (hashedOtp !== user.resetOtp) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid OTP",
+            });
+        }
+        user.resetOtpVerified = true;
+        await user.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "OTP verified successfully",
+        });
+
+    } catch (err) {
+        console.error(err);
+
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong",
+        });
     }
-
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-
-    if (
-      !user.resetOtp ||
-      !user.resetOtpExpire ||
-      user.resetOtpExpire < Date.now()
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "OTP has expired",
-      });
-    }
-
-    const hashedOtp = crypto
-      .createHash("sha256")
-      .update(otp)
-      .digest("hex");
-
-    if (hashedOtp !== user.resetOtp) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid OTP",
-      });
-    }
-    user.resetOtpVerified = true;
-    await user.save();
-
-    return res.status(200).json({
-      success: true,
-      message: "OTP verified successfully",
-    });
-
-  } catch (err) {
-    console.error(err);
-
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-    });
-  }
 };
 
 const resetPassword = async (req, res) => {
@@ -282,4 +406,4 @@ const resetPassword = async (req, res) => {
     }
 };
 
-module.exports = { registerUser, loginUser,sendResetOtp,verifyResetOtp,resetPassword };
+module.exports = { registerUser, loginUser, sendResetOtp, verifyResetOtp, resetPassword };
