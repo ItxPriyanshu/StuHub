@@ -1,10 +1,9 @@
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: "smtp-relay.brevo.com",
   port: 587,
   secure: false,
-  requireTLS: true,
   auth: {
     user: process.env.BREVO_LOGIN,
     pass: process.env.BREVO_SMTP_KEY,
@@ -13,7 +12,7 @@ const transporter = nodemailer.createTransport({
 
 const sendEmail = async ({ to, subject, text, html }) => {
   await transporter.sendMail({
-    from: `"StuHub Team" <${process.env.EMAIL_USER}>`,
+    from: `"StuHub Team" <${process.env.SENDER_EMAIL}>`,
     to,
     subject,
     text,
