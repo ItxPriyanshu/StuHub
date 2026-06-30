@@ -30,8 +30,10 @@ class TodayClassesSectiton extends ConsumerWidget {
         
                 const SizedBox(height: 12),
         
-                SizedBox(
-                  height: 300,
+                ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxHeight: 300
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: classes.isEmpty
@@ -58,13 +60,12 @@ class TodayClassesSectiton extends ConsumerWidget {
                               ),
                             ),
                           )
-                        : ListView.builder(
-                            padding: const EdgeInsets.all(20),
-                            itemCount: classes.length,
-                            itemBuilder: (context, index) {
-                              return TodayClassCard(todayClass: classes[index]);
-                            },
+                        : SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: classes.map((e)=>TodayClassCard(todayClass: e)).toList(),
                           ),
+                        )
                   ),
                 ),
               ],
