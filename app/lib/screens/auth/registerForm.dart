@@ -18,6 +18,8 @@ class _RegisterformState extends State<Registerform> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  bool obscurePassword = true;
+  bool confirmObscurePassword = true;
 
   @override
   void dispose() {
@@ -85,7 +87,7 @@ class _RegisterformState extends State<Registerform> {
 
           decoration: InputDecoration(
             prefixIcon: Icon(Icons.email_outlined),
-            prefixIconColor: Colors.orange ,
+            prefixIconColor: Colors.orange,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
               borderSide: BorderSide(width: 2, color: Colors.grey),
@@ -123,7 +125,7 @@ class _RegisterformState extends State<Registerform> {
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
-          obscureText: true,
+          obscureText: obscurePassword,
           decoration: InputDecoration(
             prefixIcon: Icon(Icons.lock_outline),
             prefixIconColor: Colors.orange,
@@ -152,6 +154,17 @@ class _RegisterformState extends State<Registerform> {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            suffixIcon: IconButton(
+              onPressed: () {
+                setState(() {
+                  obscurePassword = !obscurePassword;
+                });
+              },
+
+              icon: Icon(
+                obscurePassword ? Icons.visibility_off : Icons.visibility,
+              ),
+            ),
           ),
         ),
         SizedBox(height: 20),
@@ -164,7 +177,7 @@ class _RegisterformState extends State<Registerform> {
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
-          obscureText: true,
+          obscureText: confirmObscurePassword,
           decoration: InputDecoration(
             prefixIcon: Icon(Icons.password),
             prefixIconColor: Colors.orange,
@@ -191,6 +204,17 @@ class _RegisterformState extends State<Registerform> {
                 fontSize: 15,
                 color: Colors.grey,
                 fontWeight: FontWeight.bold,
+              ),
+            ),
+            suffixIcon: IconButton(
+              onPressed: () {
+                setState(() {
+                  confirmObscurePassword = !confirmObscurePassword;
+                });
+              },
+
+              icon: Icon(
+                confirmObscurePassword ? Icons.visibility_off : Icons.visibility,
               ),
             ),
           ),
@@ -220,23 +244,26 @@ class _RegisterformState extends State<Registerform> {
 
                 controller.success();
                 Future.delayed(const Duration(seconds: 3));
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                  builder: (_)=>SetupGateScreen(showRestoreOption: false,)),
-                  (route)=>false,
-                  );
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => SetupGateScreen(showRestoreOption: false),
+                  ),
+                  (route) => false,
+                );
               } catch (e) {
                 controller.failure();
                 ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  content: AwesomeSnackbarContent(
-                    title: 'Failed',
-                    message: '$e',
-                    contentType: ContentType.failure,
+                  SnackBar(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                    content: AwesomeSnackbarContent(
+                      title: 'Failed',
+                      message: '$e',
+                      contentType: ContentType.failure,
+                    ),
                   ),
-                ),
-              );
+                );
                 Future.delayed(const Duration(seconds: 2));
                 controller.reset();
               }
@@ -299,17 +326,17 @@ class _RegisterformState extends State<Registerform> {
           child: Center(
             child: InkWell(
               onTap: () {
-                 ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  content: AwesomeSnackbarContent(
-                    title: 'Failed',
-                    message: 'Oops! Something went wrong.',
-                    contentType: ContentType.failure,
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                    content: AwesomeSnackbarContent(
+                      title: 'Failed',
+                      message: 'Oops! Something went wrong.',
+                      contentType: ContentType.failure,
+                    ),
                   ),
-                ),
-              );
+                );
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

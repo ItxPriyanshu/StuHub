@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stuhub/models/userModel.dart';
 import 'package:stuhub/repositories/authRepository.dart';
+import 'package:stuhub/screens/auth/forgotPasswordScreen.dart';
 import 'package:stuhub/screens/setup/setup_gate_screen.dart';
 
 class Loginform extends StatefulWidget {
@@ -17,6 +18,7 @@ class Loginform extends StatefulWidget {
 class _LoginformState extends State<Loginform> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+    bool obscurePassword = true;
 
   @override
   void dispose() {
@@ -78,7 +80,7 @@ class _LoginformState extends State<Loginform> {
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
-          obscureText: true,
+          obscureText: obscurePassword,
           decoration: InputDecoration(
             prefixIcon: Icon(Icons.lock_outline),
             prefixIconColor: Colors.green,
@@ -107,6 +109,19 @@ class _LoginformState extends State<Loginform> {
                 fontWeight: FontWeight.bold,
               ),
             ),
+             suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        obscurePassword = !obscurePassword;
+                      });
+                    },
+
+                    icon: Icon(
+                      obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                  ),
           ),
         ),
 
@@ -115,7 +130,9 @@ class _LoginformState extends State<Loginform> {
           alignment: Alignment.centerRight,
           child: TextButton(
             style: TextButton.styleFrom(overlayColor: Colors.white),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_)=>ForgotPasswordScreen()));
+            },
             child: Text(
               "Forgot Password",
               style: GoogleFonts.manrope(fontSize: 12, color: Colors.green),

@@ -56,4 +56,30 @@ class Authrepository {
 
     return user;
   }
+
+  Future<void> sendResetOtp({required String email})async{
+    await service.sendResetOtp(email: email);
+  }
+
+  Future<void> verifyResetOtp({
+  required String email,
+  required String otp,
+}) async {
+  await service.verifyResetOtp(
+    email: email,
+    otp: otp,
+  );
+}
+
+Future<void> resetPassword({
+  required String email,
+  required String password,
+}) async {
+  await service.resetPassword(
+    email: email,
+    password: password,
+  );
+}
+
+
 }
