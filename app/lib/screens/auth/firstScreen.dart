@@ -111,7 +111,7 @@ class _FirstscreenState extends State<Firstscreen>
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(color: Colors.white24),
                         ),
-                        child:  Image.asset("assets/images/logo.png",
+                        child:  Image.asset("assets/images/logo3.png",
                         height: 90,
                         width: 90,
                         fit: BoxFit.contain,
