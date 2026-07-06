@@ -5,8 +5,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:stuhub/models/attendanceModel.dart';
 import 'package:stuhub/models/todayClassModel.dart';
+import 'package:stuhub/providers/actionRequiredProvider.dart';
 import 'package:stuhub/providers/analyticsProvider.dart';
+import 'package:stuhub/providers/attendanceTrendProvider.dart';
 import 'package:stuhub/providers/attendance_Provider.dart';
+import 'package:stuhub/providers/calendarProvider.dart';
 import 'package:stuhub/providers/homeProvider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -39,6 +42,10 @@ class TodayClassCard extends ConsumerWidget {
               );
               ref.invalidate(todayClassesProvider);
               ref.invalidate(subjectHealthProvider);
+              ref.invalidate(analyticsProvider);
+              ref.invalidate(AttendancetrendProvider);
+              ref.invalidate(calendarProvider);
+              ref.invalidate(actionRequiredProvider);
               if (context.mounted) {
                 ScaffoldMessenger.of(
                   context,
@@ -74,7 +81,10 @@ class TodayClassCard extends ConsumerWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text("<-- Swipe left to mark absent",style: TextStyle(fontSize: 12,color: Colors.grey),)
+                Text(
+                  "<-- Swipe left to mark absent",
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                ),
               ],
             ),
             const SizedBox(height: 8),
@@ -103,9 +113,14 @@ class TodayClassCard extends ConsumerWidget {
                       );
                       ref.invalidate(todayClassesProvider);
                       ref.invalidate(subjectHealthProvider);
+                      ref.invalidate(analyticsProvider);
+                      ref.invalidate(AttendancetrendProvider);
+                      ref.invalidate(calendarProvider);
+                      ref.invalidate(actionRequiredProvider);
+
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Marked Presnet")),
+                          const SnackBar(content: Text("Marked Present")),
                         );
                       }
                     },
@@ -138,6 +153,10 @@ class TodayClassCard extends ConsumerWidget {
                       );
                       ref.invalidate(todayClassesProvider);
                       ref.invalidate(subjectHealthProvider);
+                      ref.invalidate(analyticsProvider);
+                      ref.invalidate(AttendancetrendProvider);
+                      ref.invalidate(calendarProvider);
+                      ref.invalidate(actionRequiredProvider);
 
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stuhub/widgets/analytics/analytics_header.dart';
 import 'package:stuhub/widgets/analytics/attendanceTrend_card.dart';
 import 'package:stuhub/widgets/analytics/attendance_score_card.dart';
@@ -7,8 +8,14 @@ import 'package:stuhub/widgets/analytics/stats_row.dart';
 import 'package:stuhub/widgets/analytics/status_overview_card.dart';
 import 'package:stuhub/widgets/analytics/subject_dropdown.dart';
 
-class Analyticscreen extends StatelessWidget {
+class Analyticscreen extends ConsumerStatefulWidget {
   const Analyticscreen({super.key});
+
+  @override
+  ConsumerState<Analyticscreen> createState() => _AnalyticscreenState();
+}
+
+class _AnalyticscreenState extends ConsumerState<Analyticscreen> {
 
   @override
   Widget build(BuildContext context) {

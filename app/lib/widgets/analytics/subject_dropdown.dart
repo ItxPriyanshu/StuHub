@@ -4,13 +4,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:stuhub/providers/selected_subject_provider.dart';
 import 'package:stuhub/providers/subjectProvider.dart';
 
-class SubjectDropdown extends ConsumerWidget {
+class SubjectDropdown extends ConsumerStatefulWidget {
   const SubjectDropdown({super.key});
+
+  @override
+  ConsumerState<SubjectDropdown> createState() => _SubjectDropdownState();
+}
+
+class _SubjectDropdownState extends ConsumerState<SubjectDropdown> {
+
+bool _initialized = false;
 
   @override
   Widget build(
     BuildContext context,
-    WidgetRef ref,
   ) {
     final subjects =
         ref.watch(subjectProvider);
@@ -24,6 +31,13 @@ class SubjectDropdown extends ConsumerWidget {
       data: (subjectList) {
         if (subjectList.isEmpty) {
           return const SizedBox();
+        }
+
+        if(!_initialized && selectedSubjectId == null){
+          _initialized = true;
+          WidgetsBinding.instance.addPostFrameCallback((_){
+            ref.read(selectedSubjectProvider.notifier).state= subjectList.first.id;
+          });
         }
 
         final selectedSubject =

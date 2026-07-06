@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'StuHub',
         theme: ThemeData.dark().copyWith(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(

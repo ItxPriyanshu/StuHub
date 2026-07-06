@@ -235,7 +235,7 @@ class _LoginformState extends State<Loginform> {
                   elevation: 0,
                   content: AwesomeSnackbarContent(
                     title: 'Failed',
-                    message: 'Oops! Something went wrong.',
+                    message: 'This feature will be available in an upcoming update.',
                     contentType: ContentType.failure,
                   ),
                 ),
